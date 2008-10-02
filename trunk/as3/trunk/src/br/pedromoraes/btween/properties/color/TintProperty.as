@@ -5,12 +5,15 @@ package br.pedromoraes.btween.properties.color
 	
 	import flash.display.DisplayObject;
 	import flash.geom.ColorTransform;
+	
+	/*URGENT 
+	//TODO: fix so that reversion works
+	*/
 
 	public class TintProperty implements IProperty
 	{
 		
 		public var startValues:ColorTransform;
-		public var index:Number;
 		public var tintColor:int;
 		public var tintPercent:Number;
 
@@ -25,24 +28,23 @@ package br.pedromoraes.btween.properties.color
 			target = pTarget;
 			tintColor = piTintColor;
 			tintPercent = pnTintPercent;
-			finalTransform = new ColorTransform(0,0,0,1,tintColor >> 16,tintColor >> 8 & 0xFF,tintColor & 0xFF,0);
+			var ratio : Number = pnTintPercent/100;
+			finalTransform = new ColorTransform(1-ratio,1-ratio,1-ratio,1,tintColor >> 16 * ratio,tintColor >> 8 & 0xFF * ratio,tintColor & 0xFF * ratio,0);
 		}
 
-		public function update(pTween:BTween, piElapsed:int):void
+		public function update( index : Number, btween : BTween ):void
 		{
 			if (!startValues) init();
-			index = pTween.getValue(0, 1, piElapsed);
 
 			if (index > 0)
 			{
-				var correctedIndex:Number = index/(100/tintPercent);
 				var ct:ColorTransform = new ColorTransform();
-				ct.redMultiplier = startValues.redMultiplier + (finalTransform.redMultiplier - startValues.redMultiplier) * correctedIndex;
-				ct.greenMultiplier = startValues.greenMultiplier + (finalTransform.greenMultiplier - startValues.greenMultiplier) * correctedIndex;
-				ct.blueMultiplier = startValues.blueMultiplier + (finalTransform.blueMultiplier - startValues.blueMultiplier) * correctedIndex;
-				ct.redOffset = startValues.redOffset + (finalTransform.redOffset - startValues.redOffset) * correctedIndex;
-				ct.greenOffset = startValues.greenOffset + (finalTransform.greenOffset - startValues.greenOffset) * correctedIndex;
-				ct.blueOffset = startValues.blueOffset + (finalTransform.blueOffset - startValues.blueOffset) * correctedIndex;
+				ct.redMultiplier = startValues.redMultiplier + (finalTransform.redMultiplier - startValues.redMultiplier) * index;
+				ct.greenMultiplier = startValues.greenMultiplier + (finalTransform.greenMultiplier - startValues.greenMultiplier) * index;
+				ct.blueMultiplier = startValues.blueMultiplier + (finalTransform.blueMultiplier - startValues.blueMultiplier) * index;
+				ct.redOffset = startValues.redOffset + (finalTransform.redOffset - startValues.redOffset) * index;
+				ct.greenOffset = startValues.greenOffset + (finalTransform.greenOffset - startValues.greenOffset) * index;
+				ct.blueOffset = startValues.blueOffset + (finalTransform.blueOffset - startValues.blueOffset) * index;
 				target.transform.colorTransform = ct;
 			}
 		}
