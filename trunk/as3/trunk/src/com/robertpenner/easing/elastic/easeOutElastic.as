@@ -1,6 +1,6 @@
-package com.robertpenner.easing.cubic
+package com.robertpenner.easing.elastic
 {
-	public function easeOutCubic(t:Number, b:Number,
+	public function easeOutElastic(t:Number, b:Number,
 								   c:Number, d:Number,
 								   a:Number = 0, p:Number = 0):Number
 	{

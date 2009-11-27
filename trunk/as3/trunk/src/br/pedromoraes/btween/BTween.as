@@ -357,6 +357,10 @@ package br.pedromoraes.btween
 					}
 					delete tween.startValues;
 				}
+				else
+				{
+					tween.reverse();
+				}
 			}
 		}
 

@@ -17,7 +17,7 @@ package br.pedromoraes.btween.properties.color
 		public var tintColor:int;
 		public var tintPercent:Number;
 
-		private var finalTransform:ColorTransform;
+		public var finalTransform:ColorTransform;
 		
 		protected var _target:DisplayObject;
 		public function get target():Object { return _target }
@@ -32,10 +32,12 @@ package br.pedromoraes.btween.properties.color
 			finalTransform = new ColorTransform(1-ratio,1-ratio,1-ratio,1,tintColor >> 16 * ratio,tintColor >> 8 & 0xFF * ratio,tintColor & 0xFF * ratio,0);
 		}
 
-		public function update( index : Number, btween : BTween ):void
+		public function update( btween : BTween, elapsed : int ) : void
 		{
 			if (!startValues) init();
 
+			var index : Number = btween.getValue( 0, 1, elapsed );
+			
 			if (index > 0)
 			{
 				var ct:ColorTransform = new ColorTransform();
@@ -51,19 +53,25 @@ package br.pedromoraes.btween.properties.color
 
 		public function reverse():void
 		{
-			if (!startValues) init();
 			var f:ColorTransform = finalTransform;
-			finalTransform = startValues;
+			if ( startValues.redOffset + startValues.greenOffset + startValues.blueOffset > 0 )
+			{
+				finalTransform = startValues;
+				trace("reversing");
+			}
 			startValues = f;
 		}
 
 		public function clone():IProperty
 		{
-			return new TintProperty(_target, tintColor, tintPercent);
+			var copy : TintProperty = new TintProperty(_target, tintColor, tintPercent );
+			copy.startValues = startValues;
+			return copy;
 		}
 
 		private function init():void
 		{
+			trace("init");
 			if (target.transform.colorTransform)
 			{
 				startValues = target.transform.colorTransform;
