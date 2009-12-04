@@ -237,7 +237,6 @@ package br.pedromoraes.btween
 		public function addTarget(pTarget:Object, ... paTweens:Array):BTween
 		{
 			var laTweens:Array = paTweens[0] is Array ? paTweens[0] : paTweens;
-
 			for each (var tween:Object in laTweens)
 			{
 				var target:Object = tween.target || pTarget;
@@ -333,7 +332,10 @@ package br.pedromoraes.btween
 					for (var s:String in tween)
 					{
 						if (isValidProperty(tween, s) && tween.target)
+						{
 							tween.startValues[s] = tween.target[s];
+							if ( isNaN( tween.startValues[s] ) ) tween.startValues[s] = 0;
+						}	
 					}
 				}
 			}
@@ -369,7 +371,7 @@ package br.pedromoraes.btween
 			if (s == 'target')
 				return false;
 			else if (pTween.hasOwnProperty(s))
-				return !isNaN(Number(pTween[s]));
+				return typeof pTween[s] == "number";
 			else
 				return false;	
 		}
@@ -498,7 +500,15 @@ package br.pedromoraes.btween
 		public override function toString():String
 		{
 			var lsDebugTargets:String = "";
-			for each (var tween:Object in tweens) lsDebugTargets += tween.target + " ";
+			for each (var tween:Object in tweens)
+			{
+				lsDebugTargets += "[" + tween.target + " ( ";
+				for (var prop:String in tween)
+				{
+					if (prop != "target") lsDebugTargets += prop + ":" + tween[prop] + ",";
+				}
+				lsDebugTargets += ")] ";
+			}
 			return("BTween: time=" + time + ",delay=" + delay + ",targets:" + lsDebugTargets);
 		}
 
