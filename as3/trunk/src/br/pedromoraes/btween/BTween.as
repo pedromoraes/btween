@@ -1,6 +1,9 @@
 /*
 
-BTween by pedromoraes. keep it simple.
+Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+@author pedromoraes@gmail.com
+
 
 "If God does not exist, everything is permitted" - Fyodor Dostoevsky, in The Brothers Karamazov
 "'Everything is permitted' does not mean that nothing is forbidden..." /
@@ -38,7 +41,8 @@ few minutes, implementing IProperty or ISequenceable interfaces.
 BTween is in ALPHA state, though I've been using it for half an year, and even its design is being improved each day.
 If anyone is interested in helping, I'd be happy to move it to google code or a similar repository.
 
-Please send your thoughts to pedromoraes@gmail.com. No support requests please.  
+Please send your thoughts to pedromoraes@gmail.com. No support requests please.
+
 */
 
 package br.pedromoraes.btween
