@@ -5,8 +5,13 @@
 
 package hxmotion;
 import hxmotion.events.BTweenEvent;
+#if flash9
 import flash.display.Sprite;
 import flash.Lib;
+#else
+import jsflash.display.Sprite;
+import jsflash.Lib;
+#end
 
 class BTween extends Sequenceable {
 
@@ -43,7 +48,7 @@ class BTween extends Sequenceable {
 	}
 
 	override public function start( ?args : Dynamic ) : ISequenceable {
-		consume( args );
+		if ( !Std.is( args, BTweenEvent ) ) consume( args );
 		startTime = Lib.getTimer();
 		for ( prop in props ) prop.initValue = Reflect.field( target, prop.name );
 		dispatchEvent( new BTweenEvent( BTweenEvent.START ) );
@@ -65,6 +70,37 @@ class BTween extends Sequenceable {
 		addEventListener( BTweenEvent.UPDATE, listener );
 		return this;
 	}
+	
+	override public function queue( ?obj : Dynamic = null, ?params : Dynamic  ) : ISequenceable {
+		if ( obj == null ) {
+			var tween;
+			if ( params != null ) tween = new BTween( params );
+			else tween = this.clone();
+			super.queue( tween );
+			return tween;
+		}
+		return super.queue( obj, params );
+	}
+	
+	override public function back( trans : Dynamic = null ) : ISequenceable {
+		if ( trans != null ) ease = trans;
+		var prop : Dynamic;
+		for ( prop in props )
+		{
+			var v = prop.targetValue;
+			prop.targetValue = prop.initValue;
+			prop.initValue = v;
+		}
+		return this;
+	}
+	
+	public function clone() : BTween {
+		var clone = new BTween();				
+		clone.modifier = modifier; clone.modifierArgs = modifierArgs;
+		clone.target = target; clone.ease = ease; clone.time = time;
+		for ( prop in props ) clone.props[ clone.props.length ] = Reflect.copy( prop );
+		return clone;
+	}
 
 	private function init() : Void {
 		updateListeners = null;
@@ -75,36 +111,38 @@ class BTween extends Sequenceable {
 	}
 
 	private function consume( args : Dynamic ) {
-		if ( args == null ) return;
-		if ( Reflect.hasField( args, timeProp ) ) {
-			time = args.time;
-			Reflect.deleteField( args, timeProp );
-		}
-		if ( Reflect.hasField( args, easeProp ) ) {
-			ease = args.ease;
-			Reflect.deleteField( args, easeProp );
-		}
-		if ( Reflect.hasField( args, roundedProp ) ) {
-			rounded = args.rounded;
-			Reflect.deleteField( args, roundedProp );
-		}
-		if ( Reflect.hasField( args, targetProp ) ) {
-			target = args.target;
-			Reflect.deleteField( args, targetProp );
-		}
-		if ( Reflect.hasField( args, modifierProp ) ) {
-			modifier = args.modifier;
-			Reflect.deleteField( args, modifierProp );
-			if ( Reflect.hasField( args, argsProp ) ) {
-				modifierArgs = args.args;
-				Reflect.deleteField( args, argsProp );
+		if ( args != null ) {
+			if ( Reflect.hasField( args, timeProp ) ) {
+				time = args.time;
+				Reflect.deleteField( args, timeProp );
 			}
+			if ( Reflect.hasField( args, easeProp ) ) {
+				ease = args.ease;
+				Reflect.deleteField( args, easeProp );
+			}
+			if ( Reflect.hasField( args, roundedProp ) ) {
+				rounded = args.rounded;
+				Reflect.deleteField( args, roundedProp );
+			}
+			if ( Reflect.hasField( args, targetProp ) ) {
+				target = args.target;
+				Reflect.deleteField( args, targetProp );
+			}
+			if ( Reflect.hasField( args, modifierProp ) ) {
+				modifier = args.modifier;
+				Reflect.deleteField( args, modifierProp );
+				
+				modifierArgs = [ {} ]; //persistence obj
+				if ( Reflect.hasField( args, argsProp ) ) {
+					modifierArgs = args.args.concat( modifierArgs );
+					Reflect.deleteField( args, argsProp );
+				}
+			}
+			for ( arg in Reflect.fields( args ) ) props.push( { name : arg, targetValue : Reflect.field( args, arg ), initValue : 0 } );
 		}
-		for ( arg in Reflect.fields( args ) ) props.push( { name : arg, targetValue : Reflect.field( args, arg ), initValue : 0 } );
 	}
 
 	private function step( ?evt ) : Void {
-		
 		var t : Float = Lib.getTimer() - startTime;
 		var index : Float;
 		var finished : Bool = false;
@@ -114,8 +152,9 @@ class BTween extends Sequenceable {
 		} else index = ease( t, 0.0, 1.0, time );
 
 		if ( modifier != null ) {
-			var stepArgs : Array<Dynamic> = [ index, rounded ];
-			Reflect.callMethod( null, modifier, modifierArgs );
+			var stepArgs : Array<Dynamic> = [ index, rounded, target ];
+			if ( modifierArgs != null ) stepArgs = stepArgs.concat( modifierArgs );
+			Reflect.callMethod( null, modifier, stepArgs );
 		}
 		for ( prop in props ) {
 			if ( rounded )
@@ -128,7 +167,8 @@ class BTween extends Sequenceable {
 	}
 
 	override public function toString():String {
-		return( "BTween: time=" + time + ",props=" + props + ",modifier:" + modifier + ",modifierArgs:" + modifierArgs );
+		var propsList : String = ""; Lambda.foreach( props, function( prop:BTweenProp ) : Bool { propsList += prop.name + "=" + prop.targetValue + ","; return true; } );
+		return( "BTween: target:" + target + ",time=" + time + ",props:" + propsList + " modifier:" + modifier + ",modifierArgs:" + modifierArgs );
 	}
 }
 

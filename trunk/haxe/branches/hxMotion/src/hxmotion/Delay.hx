@@ -1,8 +1,13 @@
 package hxmotion;
 
-import flash.display.Sprite;
 import flash.events.Event;
+#if flash9
+import flash.display.Sprite;
 import flash.Lib;
+#else
+import jsflash.display.Sprite;
+import jsflash.Lib;
+#end
 import hxmotion.events.BTweenEvent;
 
 class Delay extends Sequenceable, implements ISequenceable {

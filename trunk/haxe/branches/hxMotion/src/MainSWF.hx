@@ -1,5 +1,6 @@
-﻿package ;
+﻿package;
 
+import haxe.Log;
 import hxmotion.BTween;
 import hxmotion.Ease;
 import hxmotion.events.BTweenEvent;
@@ -13,12 +14,12 @@ using hxmotion.shortcuts.HXm;
  * @author 
  */
 
-class Main extends Sprite
+class MainSWF extends Sprite
 {
 	
 	static function main() 
 	{
-		Lib.current.addChild( new Main() );
+		Lib.current.addChild( new MainSWF() );
 	}
 	
 	function new()
@@ -28,10 +29,11 @@ class Main extends Sprite
 		this.graphics.drawCircle( 100, 10, 10 );
 		this.graphics.endFill();
 		BTween.DEFAULT_EASE = Ease.inOutCubic;
-		var t = function(msg:String) { trace(msg); };
 		
-		var a = this.tween( { time:2000, x:400 } );
-		a.chain().queue().back().queue( t, "despues" );
+		
+		this.tween( { time:2000, x:400 } ).start()
+		.queue().back() 
+		.queue( Log.trace, "despues" );
 		
 	}
 
