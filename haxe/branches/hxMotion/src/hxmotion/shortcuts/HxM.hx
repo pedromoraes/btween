@@ -11,11 +11,10 @@ import hxmotion.ISequenceable;
 
 class HxM
 {
-
 	public static function tween( target : Dynamic, params : Dynamic ) : ISequenceable
 	{
 		Reflect.setField( params, 'target', target );
-		return new BTween( params ).start();
+		return new BTween( params );
 	}
 
 	public static function delay( interval : Int ) : ISequenceable

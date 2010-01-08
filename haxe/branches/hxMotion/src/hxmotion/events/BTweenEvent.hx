@@ -4,7 +4,6 @@
  */
 
 package hxmotion.events;
-
 import flash.events.Event;
 import neash.events.Event;
 

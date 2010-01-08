@@ -43,12 +43,12 @@ class Chain extends Sequenceable
 	override public function back(trans:Dynamic = null) : ISequenceable
 	{
 		var c = new Chain();
-		for ( item in this )
+		/*for ( item in this )
 		{
-			var clone = item.queue();
+			var clone = item.clone();
 			clone.back( trans );
 			c.add( clone );
-		}
+		}*/
 		return c;
 	}
 	

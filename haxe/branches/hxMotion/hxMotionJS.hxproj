@@ -4,11 +4,11 @@
   <output>
     <movie disabled="False" />
     <movie input="" />
-    <movie path="bin\hxMotion.swf" />
-    <movie fps="30" />
-    <movie width="800" />
-    <movie height="600" />
-    <movie version="9" />
+    <movie path="bin\hxMotionJS.js" />
+    <movie fps="0" />
+    <movie width="0" />
+    <movie height="0" />
+    <movie version="11" />
     <movie background="#FFFFFF" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
@@ -18,11 +18,11 @@
   <!-- Build options -->
   <build>
     <option directives="" />
-    <option flashStrict="True" />
-    <option mainClass="MainSWF" />
-    <option override="False" />
+    <option flashStrict="False" />
+    <option mainClass="MainJS" />
+    <option override="True" />
     <option verbose="True" />
-    <option additional="" />
+    <option additional="--remap flash:neash" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
@@ -30,12 +30,8 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\MainSWF.hx" />
+    <compile path="src\MainJS.hx" />
   </compileTargets>
-  <!-- Assets to embed into the output SWF -->
-  <library>
-    <!-- example: <asset path="..." id="..." update="..." glyphs="..." mode="..." place="..." sharepoint="..." /> -->
-  </library>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>
     <!-- example: <hidden path="..." /> -->
@@ -47,6 +43,7 @@
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
-    <option testMovie="Default" />
+    <option testMovie="OpenDocument" />
+    <option testMovieCommand="bin/index.html" />
   </options>
 </project>

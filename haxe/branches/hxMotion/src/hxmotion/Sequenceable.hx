@@ -39,7 +39,7 @@ class Sequenceable extends EventDispatcher, implements ISequenceable, implements
 	public function back(trans:Dynamic = null):ISequenceable {
 		return null;
 	}
-	
+
 	public function stop( ?premature : Bool = false ) : ISequenceable {
 		return null;
 	}
@@ -78,7 +78,6 @@ class Sequenceable extends EventDispatcher, implements ISequenceable, implements
 	public function chain() : Chain {
 		var ref : ISequenceable = this;
 		var chain : Chain = new Chain();
-		
 		chain.push( ref );
 		while ( ( ref = ref.previous ) != null )
 		{
@@ -94,5 +93,14 @@ class Sequenceable extends EventDispatcher, implements ISequenceable, implements
 			ref.dontRecycle = true;
 		}
 		return this;
+	}
+	
+	#if flash9
+	override public function toString() : String
+	#else
+	public function toString() : String
+	#end
+	{
+		return 'Object Sequenceable';
 	}
 }
