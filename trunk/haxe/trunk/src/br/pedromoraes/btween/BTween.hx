@@ -1,4 +1,9 @@
-﻿package br.pedromoraes.btween;
+﻿/* 
+ * @author pedromoraes@gmail.com
+ * 
+ * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+ * */
+package br.pedromoraes.btween;
 
 import flash.Lib;
 import flash.display.Sprite;
