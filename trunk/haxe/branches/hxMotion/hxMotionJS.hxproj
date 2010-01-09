@@ -20,7 +20,7 @@
     <option directives="" />
     <option flashStrict="False" />
     <option mainClass="MainJS" />
-    <option override="True" />
+    <option override="False" />
     <option verbose="True" />
     <option additional="--remap flash:neash" />
   </build>

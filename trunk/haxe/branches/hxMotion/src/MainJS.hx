@@ -1,7 +1,8 @@
 ﻿package;
 
 import haxe.Log;
-import hxmotion.modifiers.CSSPos;
+import hxmotion.Ease;
+import hxmotion.modifiers.CSS;
 import js.Lib;
 
 using hxmotion.shortcuts.HxM;
@@ -21,8 +22,8 @@ class MainJS
 	
 	static function init( e ) : Void {
 		var div = Lib.document.getElementById( 'square' );
-		div.style.tween( { time: 300, modifier : CSSPos.byPixels, args : [ 'top', 300 ] } ).start()
-		.queue( div.style.tween( { time: 300, modifier : CSSPos.byPixels, args : [ 'top', 100 ] } ) )
+		div.style.tween( { ease : Ease.inCirc, time: 300, mod : [ CSS.setPos, 'top', 100 ] } ).start()
+		.queue( div.style.tween( { time: 300, mod : [ CSS.setPos, 'top', 100 ] } ) )
 		.queue( Log.trace, 'done, callback' );
 	}
 	
