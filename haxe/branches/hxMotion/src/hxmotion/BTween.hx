@@ -25,8 +25,7 @@ class BTween extends Sequenceable {
 
 	inline static var timeProp : String = 'time';
 	inline static var easeProp : String = 'ease';
-	inline static var modifierProp : String = 'modifier';
-	inline static var argsProp : String = 'args';
+	inline static var modifierProp : String = 'mod';
 	inline static var roundedProp : String = 'rounded';
 	inline static var targetProp : String = 'target';
 
@@ -131,14 +130,14 @@ class BTween extends Sequenceable {
 				Reflect.deleteField( args, targetProp );
 			}
 			if ( Reflect.hasField( args, modifierProp ) ) {
-				modifier = args.modifier;
-				Reflect.deleteField( args, modifierProp );
-				
 				modifierArgs = [ {} ]; //persistence obj
-				if ( Reflect.hasField( args, argsProp ) ) {
-					modifierArgs = args.args.concat( modifierArgs );
-					Reflect.deleteField( args, argsProp );
+				if ( !Std.is( args.mod, Array ) )
+					modifier = args.mod;
+				else {
+					modifier = args.mod.shift();
+					modifierArgs = modifierArgs.concat( args.mod );
 				}
+				Reflect.deleteField( args, modifierProp );
 			}
 			for ( arg in Reflect.fields( args ) ) props.push( { name : arg, targetValue : Reflect.field( args, arg ), initValue : 0 } );
 		}
@@ -164,8 +163,7 @@ class BTween extends Sequenceable {
 			else
 				Reflect.setField( target, prop.name, prop.initValue + ( prop.targetValue - prop.initValue ) * index );
 		}
-		if ( finished )
-			stop();
+		if ( finished ) stop();
 	}
 
 	override public function toString():String {
