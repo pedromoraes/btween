@@ -199,7 +199,7 @@ Reflect.makeVarArgs = function(f) {
 	var $spos = $s.length;
 	{
 		var $tmp = function() {
-			$s.push("Reflect::makeVarArgs@366");
+			$s.push("Reflect::makeVarArgs@378");
 			var $spos = $s.length;
 			var a = new Array();
 			{
@@ -222,7 +222,7 @@ Reflect.makeVarArgs = function(f) {
 	$s.pop();
 }
 Reflect.prototype.__class__ = Reflect;
-haxe = {}
+if(typeof haxe=='undefined') haxe = {}
 haxe.Log = function() { }
 haxe.Log.__name__ = ["haxe","Log"];
 haxe.Log.trace = function(v,infos) {
@@ -238,8 +238,8 @@ haxe.Log.clear = function() {
 	$s.pop();
 }
 haxe.Log.prototype.__class__ = haxe.Log;
-hxmotion = {}
-hxmotion.shortcuts = {}
+if(typeof hxmotion=='undefined') hxmotion = {}
+if(!hxmotion.shortcuts) hxmotion.shortcuts = {}
 hxmotion.shortcuts.HxM = function() { }
 hxmotion.shortcuts.HxM.__name__ = ["hxmotion","shortcuts","HxM"];
 hxmotion.shortcuts.HxM.tween = function(target,params) {
@@ -264,8 +264,8 @@ hxmotion.shortcuts.HxM.delay = function(interval) {
 	$s.pop();
 }
 hxmotion.shortcuts.HxM.prototype.__class__ = hxmotion.shortcuts.HxM;
-neash = {}
-neash.events = {}
+if(typeof neash=='undefined') neash = {}
+if(!neash.events) neash.events = {}
 neash.events.IEventDispatcher = function() { }
 neash.events.IEventDispatcher.__name__ = ["neash","events","IEventDispatcher"];
 neash.events.IEventDispatcher.prototype.RemoveByID = null;
@@ -372,7 +372,7 @@ neash.events.Event.prototype.toString = function() {
 }
 neash.events.Event.prototype.type = null;
 neash.events.Event.prototype.__class__ = neash.events.Event;
-hxmotion.events = {}
+if(!hxmotion.events) hxmotion.events = {}
 hxmotion.events.BTweenEvent = function(type,bubbles,cancelable) { if( type === $_ ) return; {
 	$s.push("hxmotion.events.BTweenEvent::new");
 	var $spos = $s.length;
@@ -407,7 +407,7 @@ MainJS.init = function(e) {
 	$s.push("MainJS::init");
 	var $spos = $s.length;
 	var div = js.Lib.document.getElementById("square");
-	hxmotion.shortcuts.HxM.tween(div.style,{ ease : $closure(hxmotion.Ease,"inCirc"), time : 300, mod : [$closure(hxmotion.modifiers.CSS,"setPos"),"top",100]}).start().queue(hxmotion.shortcuts.HxM.tween(div.style,{ time : 300, mod : [$closure(hxmotion.modifiers.CSS,"setPos"),"top",100]})).queue($closure(haxe.Log,"trace"),"done, callback");
+	hxmotion.shortcuts.HxM.tween(div.style,{ ease : $closure(hxmotion.Ease,"inCirc"), time : 300, mod : [$closure(hxmotion.modifiers.CSS,"setPos"),"top",300]}).start().queue(hxmotion.shortcuts.HxM.tween(div.style,{ time : 300, mod : [$closure(hxmotion.modifiers.CSS,"setPos"),"top",100]})).queue($closure(haxe.Log,"trace"),"done, callback");
 	$s.pop();
 }
 MainJS.prototype.__class__ = MainJS;
@@ -959,7 +959,7 @@ haxe.Timer = function(time_ms) { if( time_ms === $_ ) return; {
 	var $spos = $s.length;
 	this.id = haxe.Timer.arr.length;
 	haxe.Timer.arr[this.id] = this;
-	this.timerId = window.setInterval("haxe.Timer.arr[" + this.id + "].run();",time_ms);
+	this.timerId = window.setInterval(("haxe.Timer.arr[" + this.id) + "].run();",time_ms);
 	$s.pop();
 }}
 haxe.Timer.__name__ = ["haxe","Timer"];
@@ -1016,7 +1016,7 @@ haxe.Timer.prototype.stop = function() {
 }
 haxe.Timer.prototype.timerId = null;
 haxe.Timer.prototype.__class__ = haxe.Timer;
-jsflash = {}
+if(typeof jsflash=='undefined') jsflash = {}
 jsflash.Lib = function() { }
 jsflash.Lib.__name__ = ["jsflash","Lib"];
 jsflash.Lib.getTimer = function() {
@@ -1316,7 +1316,7 @@ hxmotion.Ease.inBack = function(t,b,c,d) {
 	var $spos = $s.length;
 	var s = 1.70158;
 	{
-		var $tmp = c * (t /= d) * t * ((s + 1) * t - s) + b;
+		var $tmp = ((c * (t /= d)) * t) * ((s + 1) * t - s) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1327,7 +1327,7 @@ hxmotion.Ease.outBack = function(t,b,c,d) {
 	var $spos = $s.length;
 	var s = 1.70158;
 	{
-		var $tmp = c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
+		var $tmp = c * (((t = t / d - 1) * t) * ((s + 1) * t + s) + 1) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1338,12 +1338,12 @@ hxmotion.Ease.inOutBack = function(t,b,c,d) {
 	var $spos = $s.length;
 	var s = 1.70158;
 	if((t /= d / 2) < 1) {
-		var $tmp = c / 2 * (t * t * (((s *= 1.525) + 1) * t - s)) + b;
+		var $tmp = (c / 2) * ((t * t) * (((s *= 1.525) + 1) * t - s)) + b;
 		$s.pop();
 		return $tmp;
 	}
 	{
-		var $tmp = c / 2 * ((t -= 2) * t * (((s *= 1.525) + 1) * t + s) + 2) + b;
+		var $tmp = (c / 2) * (((t -= 2) * t) * (((s *= 1.525) + 1) * t + s) + 2) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1353,22 +1353,22 @@ hxmotion.Ease.outBounce = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::outBounce");
 	var $spos = $s.length;
 	if((t /= d) < (1 / 2.75)) {
-		var $tmp = c * (7.5625 * t * t) + b;
+		var $tmp = c * ((7.5625 * t) * t) + b;
 		$s.pop();
 		return $tmp;
 	}
 	else if(t < (2 / 2.75)) {
-		var $tmp = c * (7.5625 * (t -= (1.5 / 2.75)) * t + .75) + b;
+		var $tmp = c * ((7.5625 * (t -= (1.5 / 2.75))) * t + .75) + b;
 		$s.pop();
 		return $tmp;
 	}
 	else if(t < (2.5 / 2.75)) {
-		var $tmp = c * (7.5625 * (t -= (2.25 / 2.75)) * t + .9375) + b;
+		var $tmp = c * ((7.5625 * (t -= (2.25 / 2.75))) * t + .9375) + b;
 		$s.pop();
 		return $tmp;
 	}
 	else {
-		var $tmp = c * (7.5625 * (t -= (2.625 / 2.75)) * t + .984375) + b;
+		var $tmp = c * ((7.5625 * (t -= (2.625 / 2.75))) * t + .984375) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1378,7 +1378,7 @@ hxmotion.Ease.inBounce = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inBounce");
 	var $spos = $s.length;
 	{
-		var $tmp = c - hxmotion.Ease.outBounce(d - t,0,c,d) + b;
+		var $tmp = (c - hxmotion.Ease.outBounce(d - t,0,c,d)) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1388,12 +1388,12 @@ hxmotion.Ease.inOutBounce = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inOutBounce");
 	var $spos = $s.length;
 	if(t < d / 2) {
-		var $tmp = c - hxmotion.Ease.outBounce(d - t * 2,0,c,d) * .5 + b;
+		var $tmp = (c - hxmotion.Ease.outBounce(d - t * 2,0,c,d)) * .5 + b;
 		$s.pop();
 		return $tmp;
 	}
 	else {
-		var $tmp = hxmotion.Ease.outBounce(t * 2 - d,0,c,d) * .5 + c * .5 + b;
+		var $tmp = (hxmotion.Ease.outBounce(t * 2 - d,0,c,d) * .5 + c * .5) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1423,12 +1423,12 @@ hxmotion.Ease.inOutCirc = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inOutCirc");
 	var $spos = $s.length;
 	if((t /= d / 2) < 1) {
-		var $tmp = -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
+		var $tmp = (-c / 2) * (Math.sqrt(1 - t * t) - 1) + b;
 		$s.pop();
 		return $tmp;
 	}
 	{
-		var $tmp = c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
+		var $tmp = (c / 2) * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1438,7 +1438,7 @@ hxmotion.Ease.inCubic = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inCubic");
 	var $spos = $s.length;
 	{
-		var $tmp = c * (t /= d) * t * t + b;
+		var $tmp = ((c * (t /= d)) * t) * t + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1448,7 +1448,7 @@ hxmotion.Ease.outCubic = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::outCubic");
 	var $spos = $s.length;
 	{
-		var $tmp = c * ((t = t / d - 1) * t * t + 1) + b;
+		var $tmp = c * (((t = t / d - 1) * t) * t + 1) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1458,12 +1458,12 @@ hxmotion.Ease.inOutCubic = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inOutCubic");
 	var $spos = $s.length;
 	if((t /= d / 2) < 1) {
-		var $tmp = c / 2 * t * t * t + b;
+		var $tmp = (((c / 2) * t) * t) * t + b;
 		$s.pop();
 		return $tmp;
 	}
 	{
-		var $tmp = c / 2 * ((t -= 2) * t * t + 2) + b;
+		var $tmp = (c / 2) * (((t -= 2) * t) * t + 2) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1486,7 +1486,7 @@ hxmotion.Ease.inElastic = function(t,b,c,d) {
 	var a = c;
 	s = p / 4;
 	{
-		var $tmp = -(a * Math.pow(2,10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+		var $tmp = -((a * Math.pow(2,10 * (t -= 1))) * Math.sin(((t * d - s) * (2 * Math.PI)) / p)) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1509,7 +1509,7 @@ hxmotion.Ease.outElastic = function(t,b,c,d) {
 	var a = c;
 	s = p / 4;
 	{
-		var $tmp = (a * Math.pow(2,-10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);
+		var $tmp = (((a * Math.pow(2,-10 * t)) * Math.sin(((t * d - s) * (2 * Math.PI)) / p) + c) + b);
 		$s.pop();
 		return $tmp;
 	}
@@ -1532,12 +1532,12 @@ hxmotion.Ease.inOutElastic = function(t,b,c,d) {
 	var a = c;
 	s = p / 4;
 	if(t < 1) {
-		var $tmp = -0.5 * (a * Math.pow(2,10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+		var $tmp = -0.5 * ((a * Math.pow(2,10 * (t -= 1))) * Math.sin(((t * d - s) * (2 * Math.PI)) / p)) + b;
 		$s.pop();
 		return $tmp;
 	}
 	{
-		var $tmp = a * Math.pow(2,-10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
+		var $tmp = (((a * Math.pow(2,-10 * (t -= 1))) * Math.sin(((t * d - s) * (2 * Math.PI)) / p)) * .5 + c) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1557,7 +1557,7 @@ hxmotion.Ease.outExpo = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::outExpo");
 	var $spos = $s.length;
 	{
-		var $tmp = ((t == d)?b + c:c * (-Math.pow(2,-10 * t / d) + 1) + b);
+		var $tmp = ((t == d)?b + c:c * (-Math.pow(2,(-10 * t) / d) + 1) + b);
 		$s.pop();
 		return $tmp;
 	}
@@ -1576,12 +1576,12 @@ hxmotion.Ease.inOutExpo = function(t,b,c,d) {
 		return $tmp;
 	}
 	if((t /= d / 2) < 1) {
-		var $tmp = c / 2 * Math.pow(2,10 * (t - 1)) + b;
+		var $tmp = (c / 2) * Math.pow(2,10 * (t - 1)) + b;
 		$s.pop();
 		return $tmp;
 	}
 	{
-		var $tmp = c / 2 * (-Math.pow(2,-10 * --t) + 2) + b;
+		var $tmp = (c / 2) * (-Math.pow(2,-10 * --t) + 2) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1591,7 +1591,7 @@ hxmotion.Ease.linear = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::linear");
 	var $spos = $s.length;
 	{
-		var $tmp = c * t / d + b;
+		var $tmp = (c * t) / d + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1601,7 +1601,7 @@ hxmotion.Ease.inQuad = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inQuad");
 	var $spos = $s.length;
 	{
-		var $tmp = c * (t /= d) * t + b;
+		var $tmp = (c * (t /= d)) * t + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1611,7 +1611,7 @@ hxmotion.Ease.outQuad = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::outQuad");
 	var $spos = $s.length;
 	{
-		var $tmp = -c * (t /= d) * (t - 2) + b;
+		var $tmp = (-c * (t /= d)) * (t - 2) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1621,12 +1621,12 @@ hxmotion.Ease.inOutQuad = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inOutQuad");
 	var $spos = $s.length;
 	if((t /= d / 2) < 1) {
-		var $tmp = c / 2 * t * t + b;
+		var $tmp = ((c / 2) * t) * t + b;
 		$s.pop();
 		return $tmp;
 	}
 	{
-		var $tmp = -c / 2 * ((--t) * (t - 2) - 1) + b;
+		var $tmp = (-c / 2) * ((--t) * (t - 2) - 1) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1636,7 +1636,7 @@ hxmotion.Ease.inQuart = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inQuart");
 	var $spos = $s.length;
 	{
-		var $tmp = c * (t /= d) * t * t * t + b;
+		var $tmp = (((c * (t /= d)) * t) * t) * t + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1646,7 +1646,7 @@ hxmotion.Ease.outQuart = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::outQuart");
 	var $spos = $s.length;
 	{
-		var $tmp = -c * ((t = t / d - 1) * t * t * t - 1) + b;
+		var $tmp = -c * ((((t = t / d - 1) * t) * t) * t - 1) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1656,12 +1656,12 @@ hxmotion.Ease.inOutQuart = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inOutQuart");
 	var $spos = $s.length;
 	if((t /= d / 2) < 1) {
-		var $tmp = c / 2 * t * t * t * t + b;
+		var $tmp = ((((c / 2) * t) * t) * t) * t + b;
 		$s.pop();
 		return $tmp;
 	}
 	{
-		var $tmp = -c / 2 * ((t -= 2) * t * t * t - 2) + b;
+		var $tmp = (-c / 2) * ((((t -= 2) * t) * t) * t - 2) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1671,7 +1671,7 @@ hxmotion.Ease.inQuint = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inQuint");
 	var $spos = $s.length;
 	{
-		var $tmp = c * (t /= d) * t * t * t * t + b;
+		var $tmp = ((((c * (t /= d)) * t) * t) * t) * t + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1681,7 +1681,7 @@ hxmotion.Ease.outQuint = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::outQuint");
 	var $spos = $s.length;
 	{
-		var $tmp = c * ((t = t / d - 1) * t * t * t * t + 1) + b;
+		var $tmp = c * (((((t = t / d - 1) * t) * t) * t) * t + 1) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1691,12 +1691,12 @@ hxmotion.Ease.inOutQuint = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inOutQuint");
 	var $spos = $s.length;
 	if((t /= d / 2) < 1) {
-		var $tmp = c / 2 * t * t * t * t * t + b;
+		var $tmp = (((((c / 2) * t) * t) * t) * t) * t + b;
 		$s.pop();
 		return $tmp;
 	}
 	{
-		var $tmp = c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
+		var $tmp = (c / 2) * (((((t -= 2) * t) * t) * t) * t + 2) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1706,7 +1706,7 @@ hxmotion.Ease.inSine = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inSine");
 	var $spos = $s.length;
 	{
-		var $tmp = -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
+		var $tmp = (-c * Math.cos((t / d) * (Math.PI / 2)) + c) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1716,7 +1716,7 @@ hxmotion.Ease.outSine = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::outSine");
 	var $spos = $s.length;
 	{
-		var $tmp = c * Math.sin(t / d * (Math.PI / 2)) + b;
+		var $tmp = c * Math.sin((t / d) * (Math.PI / 2)) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -1726,7 +1726,7 @@ hxmotion.Ease.inOutSine = function(t,b,c,d) {
 	$s.push("hxmotion.Ease::inOutSine");
 	var $spos = $s.length;
 	{
-		var $tmp = -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
+		var $tmp = (-c / 2) * (Math.cos((Math.PI * t) / d) - 1) + b;
 		$s.pop();
 		return $tmp;
 	}
@@ -2228,7 +2228,7 @@ hxmotion.Chain.prototype.toString = function() {
 	$s.pop();
 }
 hxmotion.Chain.prototype.__class__ = hxmotion.Chain;
-jsflash.display = {}
+if(!jsflash.display) jsflash.display = {}
 jsflash.display.Sprite = function(p) { if( p === $_ ) return; {
 	$s.push("jsflash.display.Sprite::new");
 	var $spos = $s.length;
@@ -2456,7 +2456,7 @@ hxmotion.BTween.prototype.toString = function() {
 	Lambda.foreach(this.props,function(prop) {
 		$s.push("hxmotion.BTween::toString@170");
 		var $spos = $s.length;
-		propsList += prop.name + "=" + prop.targetValue + ",";
+		propsList += ((prop.name + "=") + prop.targetValue) + ",";
 		{
 			$s.pop();
 			return true;
@@ -2464,7 +2464,7 @@ hxmotion.BTween.prototype.toString = function() {
 		$s.pop();
 	});
 	{
-		var $tmp = ("BTween: target:" + this.target + ",time=" + this.time + ",props:" + propsList + " modifier:" + this.modifier + ",modifierArgs:" + this.modifierArgs);
+		var $tmp = ((((((((("BTween: target:" + this.target) + ",time=") + this.time) + ",props:") + propsList) + " modifier:") + this.modifier) + ",modifierArgs:") + this.modifierArgs);
 		$s.pop();
 		return $tmp;
 	}
@@ -2484,10 +2484,10 @@ hxmotion.BTween.prototype.update = function(listener) {
 }
 hxmotion.BTween.prototype.updateListeners = null;
 hxmotion.BTween.prototype.__class__ = hxmotion.BTween;
-hxmotion.modifiers = {}
+if(!hxmotion.modifiers) hxmotion.modifiers = {}
 hxmotion.modifiers.CSS = function() { }
 hxmotion.modifiers.CSS.__name__ = ["hxmotion","modifiers","CSS"];
-hxmotion.modifiers.CSS.setPos = function(ix,round,pers,target,prop,value,unit) {
+hxmotion.modifiers.CSS.setPos = function(ix,round,target,pers,prop,value,unit) {
 	$s.push("hxmotion.modifiers.CSS::setPos");
 	var $spos = $s.length;
 	if(unit == null) unit = "px";
@@ -2504,7 +2504,7 @@ hxmotion.modifiers.CSS.setPos = function(ix,round,pers,target,prop,value,unit) {
 	$s.pop();
 }
 hxmotion.modifiers.CSS.prototype.__class__ = hxmotion.modifiers.CSS;
-js = {}
+if(typeof js=='undefined') js = {}
 js.Lib = function() { }
 js.Lib.__name__ = ["js","Lib"];
 js.Lib.isIE = null;
@@ -2549,7 +2549,7 @@ js.Boot.__unhtml = function(s) {
 js.Boot.__trace = function(v,i) {
 	$s.push("js.Boot::__trace");
 	var $spos = $s.length;
-	var msg = (i != null?i.fileName + ":" + i.lineNumber + ": ":"");
+	var msg = (i != null?((i.fileName + ":") + i.lineNumber) + ": ":"");
 	msg += js.Boot.__unhtml(js.Boot.__string_rec(v,"")) + "<br/>";
 	var d = document.getElementById("haxe:trace");
 	if(d == null) alert("No haxe:trace element defined\n" + msg);
@@ -2678,10 +2678,10 @@ js.Boot.__string_rec = function(o,s) {
 		if(hasp && !o.hasOwnProperty(k)) continue;
 		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__") continue;
 		if(str.length != 2) str += ", \n";
-		str += s + k + " : " + js.Boot.__string_rec(o[k],s);
+		str += ((s + k) + " : ") + js.Boot.__string_rec(o[k],s);
 		}
 		s = s.substring(1);
-		str += "\n" + s + "}";
+		str += ("\n" + s) + "}";
 		{
 			$s.pop();
 			return str;
@@ -2825,17 +2825,17 @@ js.Boot.__instanceof = function(o,cl) {
 js.Boot.__init = function() {
 	$s.push("js.Boot::__init");
 	var $spos = $s.length;
-	js.Lib.isIE = (document.all != null && window.opera == null);
-	js.Lib.isOpera = (window.opera != null);
+	js.Lib.isIE = (typeof document!='undefined' && document.all != null && typeof window!='undefined' && window.opera == null);
+	js.Lib.isOpera = (typeof window!='undefined' && window.opera != null);
 	Array.prototype.copy = Array.prototype.slice;
 	Array.prototype.insert = function(i,x) {
-		$s.push("js.Boot::__init@199");
+		$s.push("js.Boot::__init@205");
 		var $spos = $s.length;
 		this.splice(i,0,x);
 		$s.pop();
 	}
 	Array.prototype.remove = (Array.prototype.indexOf?function(obj) {
-		$s.push("js.Boot::__init@202");
+		$s.push("js.Boot::__init@208");
 		var $spos = $s.length;
 		var idx = this.indexOf(obj);
 		if(idx == -1) {
@@ -2849,7 +2849,7 @@ js.Boot.__init = function() {
 		}
 		$s.pop();
 	}:function(obj) {
-		$s.push("js.Boot::__init@207");
+		$s.push("js.Boot::__init@213");
 		var $spos = $s.length;
 		var i = 0;
 		var l = this.length;
@@ -2870,11 +2870,11 @@ js.Boot.__init = function() {
 		$s.pop();
 	});
 	Array.prototype.iterator = function() {
-		$s.push("js.Boot::__init@219");
+		$s.push("js.Boot::__init@225");
 		var $spos = $s.length;
 		{
 			var $tmp = { cur : 0, arr : this, hasNext : function() {
-				$s.push("js.Boot::__init@219@223");
+				$s.push("js.Boot::__init@225@229");
 				var $spos = $s.length;
 				{
 					var $tmp = this.cur < this.arr.length;
@@ -2883,7 +2883,7 @@ js.Boot.__init = function() {
 				}
 				$s.pop();
 			}, next : function() {
-				$s.push("js.Boot::__init@219@226");
+				$s.push("js.Boot::__init@225@232");
 				var $spos = $s.length;
 				{
 					var $tmp = this.arr[this.cur++];
@@ -2900,7 +2900,7 @@ js.Boot.__init = function() {
 	var cca = String.prototype.charCodeAt;
 	String.prototype.cca = cca;
 	String.prototype.charCodeAt = function(i) {
-		$s.push("js.Boot::__init@233");
+		$s.push("js.Boot::__init@239");
 		var $spos = $s.length;
 		var x = cca.call(this,i);
 		if(isNaN(x)) {
@@ -2915,7 +2915,7 @@ js.Boot.__init = function() {
 	}
 	var oldsub = String.prototype.substr;
 	String.prototype.substr = function(pos,len) {
-		$s.push("js.Boot::__init@240");
+		$s.push("js.Boot::__init@246");
 		var $spos = $s.length;
 		if(pos != null && pos != 0 && len != null && len < 0) {
 			$s.pop();
@@ -2927,7 +2927,7 @@ js.Boot.__init = function() {
 			if(pos < 0) pos = 0;
 		}
 		else if(len < 0) {
-			len = this.length + len - pos;
+			len = (this.length + len) - pos;
 		}
 		{
 			var $tmp = oldsub.apply(this,[pos,len]);
@@ -3162,7 +3162,7 @@ js.Boot.__init();
 		var mi = date.getMinutes();
 		var s = date.getSeconds();
 		{
-			var $tmp = date.getFullYear() + "-" + ((m < 10?"0" + m:"" + m)) + "-" + ((d < 10?"0" + d:"" + d)) + " " + ((h < 10?"0" + h:"" + h)) + ":" + ((mi < 10?"0" + mi:"" + mi)) + ":" + ((s < 10?"0" + s:"" + s));
+			var $tmp = (((((((((date.getFullYear() + "-") + ((m < 10?"0" + m:"" + m))) + "-") + ((d < 10?"0" + d:"" + d))) + " ") + ((h < 10?"0" + h:"" + h))) + ":") + ((mi < 10?"0" + mi:"" + mi))) + ":") + ((s < 10?"0" + s:"" + s));
 			$s.pop();
 			return $tmp;
 		}

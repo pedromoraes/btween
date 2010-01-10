@@ -22,7 +22,7 @@ class MainJS
 	
 	static function init( e ) : Void {
 		var div = Lib.document.getElementById( 'square' );
-		div.style.tween( { ease : Ease.inCirc, time: 300, mod : [ CSS.setPos, 'top', 100 ] } ).start()
+		div.style.tween( { ease : Ease.inCirc, time: 300, mod : [ CSS.setPos, 'top', 300 ] } ).start()
 		.queue( div.style.tween( { time: 300, mod : [ CSS.setPos, 'top', 100 ] } ) )
 		.queue( Log.trace, 'done, callback' );
 	}

@@ -8,7 +8,7 @@ import js.Dom;
 
 class CSS
 {
-	public static function setPos( ix : Float, round : Bool, pers : Dynamic, target, prop : String, value : Int, ?unit : String = "px" ) : Void
+	public static function setPos( ix : Float, round : Bool, target, pers : Dynamic, prop : String, value : Int, ?unit : String = "px" ) : Void
 	{
 		var initValue : Int;
 		if ( pers.initValue != null ) initValue = pers.initValue;
