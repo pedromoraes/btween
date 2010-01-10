@@ -30,7 +30,6 @@ class MainSWF extends Sprite
 		this.graphics.endFill();
 		BTween.DEFAULT_EASE = Ease.inOutCubic;
 		
-		
 		this.tween( { time:2000, x:400 } ).start()
 		.queue().back() 
 		.queue( Log.trace, "despues" );

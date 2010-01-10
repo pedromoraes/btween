@@ -4,8 +4,8 @@
  */
 
 package hxmotion.events;
+
 import flash.events.Event;
-import neash.events.Event;
 
 class BTweenEvent extends Event
 {

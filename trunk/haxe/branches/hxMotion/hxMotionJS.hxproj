@@ -21,8 +21,8 @@
     <option flashStrict="False" />
     <option mainClass="MainJS" />
     <option override="False" />
-    <option verbose="True" />
-    <option additional="--remap flash:neash" />
+    <option verbose="False" />
+    <option additional="--remap flash:neash&#xA;" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
