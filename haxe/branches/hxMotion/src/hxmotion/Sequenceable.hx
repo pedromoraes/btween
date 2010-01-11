@@ -1,7 +1,6 @@
 ﻿package hxmotion;
 
-import flash.events.EventDispatcher;
-import flash.events.IEventDispatcher;
+import hxmotion.Types;
 import hxmotion.events.BTweenEvent;
 
 class Sequenceable extends EventDispatcher, implements ISequenceable, implements IEventDispatcher {

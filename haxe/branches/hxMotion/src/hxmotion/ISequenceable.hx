@@ -1,5 +1,6 @@
 ﻿package hxmotion;
-import flash.events.IEventDispatcher;
+
+import hxmotion.Types;
 
 interface ISequenceable implements IEventDispatcher {
 

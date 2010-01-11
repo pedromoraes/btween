@@ -5,7 +5,7 @@ import hxmotion.Ease;
 import hxmotion.modifiers.CSS;
 import js.Lib;
 
-using hxmotion.shortcuts.HxM;
+using hxmotion.Shortcuts;
 
 /**
  * ...
@@ -21,10 +21,16 @@ class MainJS
 	}
 	
 	static function init( e ) : Void {
+		#if debug
 		var div = Lib.document.getElementById( 'square' );
-		div.style.tween( { ease : Ease.inCirc, time: 300, mod : [ CSS.setPos, 'top', 300 ] } ).start()
-		.queue( div.style.tween( { time: 300, mod : [ CSS.setPos, 'top', 100 ] } ) )
+		div.style.top = "0px";
+		
+		div.style.tween( { ease : Ease.inCirc, time: 300, mod : [ CSS.pos, { top : 300 } ] } ).start()
+		.queue( div.style.tween( [ { time: 300, mod : [ CSS.pos, { top : 100 } ] } ] ) )
 		.queue( Log.trace, 'done, callback' );
+		#else
+		hxmotion.Refs.ref();
+		#end
 	}
 	
 }

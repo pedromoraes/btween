@@ -22,7 +22,7 @@
     <option mainClass="MainJS" />
     <option override="False" />
     <option verbose="False" />
-    <option additional="--remap flash:neash&#xA;" />
+    <option additional="" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
