@@ -1,0 +1,14 @@
+-lib neash
+-cp src
+-main MainJS
+-js bin/hxMotionJS.js
+--remap flash:neash
+
+--next
+-lib neash
+-cp src
+-swf-header 800:600:30:FFFFFF 
+-main MainSWF
+-swf9 bin/hxMotion.swc
+-swf-version 10
+--flash-strict

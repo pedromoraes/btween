@@ -6,14 +6,9 @@
  */
 
 package hxmotion;
+
 import hxmotion.events.BTweenEvent;
-#if flash9
-import flash.display.Sprite;
-import flash.Lib;
-#else
-import jsflash.display.Sprite;
-import jsflash.Lib;
-#end
+import hxmotion.Types;
 
 class BTween extends Sequenceable {
 
@@ -22,7 +17,7 @@ class BTween extends Sequenceable {
 	public static var DEFAULT_ROUNDED : Bool = false;
 
 	inline static var ENTER_FRAME : String = 'enterFrame';
-
+	inline static var FLAG_MODARGS_REVERSION : String = '__reversion_pending';
 	inline static var timeProp : String = 'time';
 	inline static var easeProp : String = 'ease';
 	inline static var modifierProp : String = 'mod';
@@ -33,14 +28,14 @@ class BTween extends Sequenceable {
 	public var rounded : Bool;
 	public var target : Dynamic;
 	public var time : Int;
-	public var props : Array<BTweenProp>;
+	public var props : TypedArray<BTweenProp>;
 	public var modifier : Dynamic;
-	public var modifierArgs : Array<Dynamic>;
+	public var modifierArgs : Dynamic;
 
 	var startTime : Int;
-	var updateListeners : Array<Dynamic>;
+	var updateListeners : TypedArray<Dynamic>;
 
-	public static var enterFrameDispatcher : Sprite = new Sprite();
+	public static var enterFrameDispatcher : FrameDispatcher = new FrameDispatcher();
 
 	public function new( ?args : Dynamic ) {
 		super();
@@ -52,6 +47,10 @@ class BTween extends Sequenceable {
 		if ( !Std.is( args, BTweenEvent ) ) consume( args );
 		startTime = Lib.getTimer();
 		for ( prop in props ) prop.initValue = Reflect.field( target, prop.name );
+		if ( modifier != null && Reflect.field( modifierArgs, FLAG_MODARGS_REVERSION ) != null )
+		{
+			reverseModArgs( modifierArgs, true );
+		}
 		dispatchEvent( new BTweenEvent( BTweenEvent.START ) );
 		enterFrameDispatcher.addEventListener( ENTER_FRAME, step );
 		return this;
@@ -66,7 +65,7 @@ class BTween extends Sequenceable {
 	}
 	
 	override public function update( listener : Dynamic ) : ISequenceable {
-		if ( updateListeners == null ) updateListeners = [];
+		if ( updateListeners == null ) updateListeners = new TypedArray<Dynamic>();
 		updateListeners.push( listener );
 		addEventListener( BTweenEvent.UPDATE, listener );
 		return this;
@@ -92,7 +91,32 @@ class BTween extends Sequenceable {
 			prop.targetValue = prop.initValue;
 			prop.initValue = v;
 		}
+		if ( modifier )
+		{
+			if ( Reflect.field( modifierArgs, 'initValue' ) == null )
+			{
+				Reflect.setField( modifierArgs, FLAG_MODARGS_REVERSION, true );
+			}
+			else
+			{
+				reverseModArgs( modifierArgs );
+			}
+		}
 		return this;
+	}
+	
+	private function reverseModArgs( args : Dynamic, ?deleteFlag : Bool = false ) : Void
+	{
+		if ( deleteFlag ) Reflect.deleteField( args, FLAG_MODARGS_REVERSION );
+		for ( s in Reflect.fields( args ) )
+		{
+			if ( s != 'initValue' && Reflect.field( args.initValue, s ) != null )
+			{
+				var value = Reflect.field( args, s );
+				Reflect.setField( args, s, Reflect.field( args.initValue, s ) );
+				Reflect.setField( args.initValue, s, value );
+			}
+		}
 	}
 	
 	public function clone() : BTween {
@@ -108,7 +132,7 @@ class BTween extends Sequenceable {
 		ease = DEFAULT_EASE;
 		rounded = DEFAULT_ROUNDED;
 		time = DEFAULT_TIME;
-		props = [];
+		props = new TypedArray<BTweenProp>();
 	}
 
 	private function consume( args : Dynamic ) {
@@ -130,12 +154,12 @@ class BTween extends Sequenceable {
 				Reflect.deleteField( args, targetProp );
 			}
 			if ( Reflect.hasField( args, modifierProp ) ) {
-				modifierArgs = [ {} ]; //persistence obj
-				if ( !Std.is( args.mod, Array ) )
+				if ( !Std.is( args.mod, Array ) ) {
 					modifier = args.mod;
-				else {
-					modifier = args.mod.shift();
-					modifierArgs = modifierArgs.concat( args.mod );
+					modifierArgs = [ { } ];
+				} else {
+					modifier = args.mod[ 0 ];
+					modifierArgs = args.mod[ 1 ];
 				}
 				Reflect.deleteField( args, modifierProp );
 			}
@@ -152,11 +176,9 @@ class BTween extends Sequenceable {
 			finished = true;
 		} else index = ease( t, 0.0, 1.0, time );
 
-		if ( modifier != null ) {
-			var stepArgs : Array<Dynamic> = [ index, rounded, target ];
-			if ( modifierArgs != null ) stepArgs = stepArgs.concat( modifierArgs );
-			Reflect.callMethod( null, modifier, stepArgs );
-		}
+		if ( modifier != null )
+			Reflect.callMethod( null, modifier, [ index, rounded, target, modifierArgs ] );
+
 		for ( prop in props ) {
 			if ( rounded )
 				Reflect.setField( target, prop.name, Math.round( prop.initValue + ( prop.targetValue - prop.initValue ) * index ) );
@@ -167,8 +189,8 @@ class BTween extends Sequenceable {
 	}
 
 	override public function toString():String {
-		var propsList : String = ""; Lambda.foreach( props, function( prop:BTweenProp ) : Bool { propsList += prop.name + "=" + prop.targetValue + ","; return true; } );
-		return( "BTween: target:" + target + ",time=" + time + ",props:" + propsList + " modifier:" + modifier + ",modifierArgs:" + modifierArgs );
+		//var propsList : String = ""; Lambda.foreach( props, function( prop:BTweenProp ) : Bool { propsList += prop.name + "=" + prop.targetValue + ","; return true; } );
+		return( "BTween: target:" + target + ",time=" + time + ",modifier:" + modifier + ",modifierArgs:" + modifierArgs );
 	}
 }
 

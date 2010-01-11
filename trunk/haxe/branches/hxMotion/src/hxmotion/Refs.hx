@@ -4,21 +4,22 @@
  */
 
 package hxmotion;
-import hxmotion.shortcuts.HxM;
 
 class Refs 
 {
 	
-	static function ref() : Void
+	public static function ref() : Void
 	{
-		/*BTween;
+		BTween;
 		Call;
 		Chain;
 		Delay;
 		Ease;
+		#if flash
 		Load;
-		HxM;
-		ISequenceable;*/
+		#end
+		Shortcuts;
+		ISequenceable;
 	}
 	
 }

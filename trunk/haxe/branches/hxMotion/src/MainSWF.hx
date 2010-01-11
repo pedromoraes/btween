@@ -7,8 +7,9 @@ import hxmotion.events.BTweenEvent;
 import flash.display.Sprite;
 import flash.Lib;
 import haxe.FastList;
+import hxmotion.modifiers.Color;
 
-using hxmotion.shortcuts.HXm;
+using hxmotion.Shortcuts;
 /**
  * ...
  * @author 
@@ -25,141 +26,21 @@ class MainSWF extends Sprite
 	function new()
 	{
 		super();
-		this.graphics.beginFill( 0xff0000, 1 );
-		this.graphics.drawCircle( 100, 10, 10 );
-		this.graphics.endFill();
+		#if debug
+		var ball : Sprite = new Sprite();
+		ball.graphics.beginFill( 0xff0000, 1 );
+		ball.graphics.drawCircle( 100, 10, 10 );
+		ball.graphics.endFill();
 		BTween.DEFAULT_EASE = Ease.inOutCubic;
-		
-		this.tween( { time:2000, x:400 } ).start()
-		.queue().back() 
+		BTween.DEFAULT_TIME = 666;
+		addChild( ball );
+		ball.tween( { x:400, mod : [ Color.fade, {alpha:0} ] } ).start()
+		.queue().back()
+		.queue( { target : ball, mod : [ Color.tint, {color: 0x33f006} ] } )
 		.queue( Log.trace, "despues" );
-		
+		#else
+		hxmotion.Refs.ref();
+		#end
 	}
 
-	private function typeTests() : Void
-	{
-		var t = Lib.getTimer;
-		var size : Int = 99;
-		var p : String;
-		var stuffClass : Array<Thing> = [];
-		var initY : Int = t();
-		for ( i in 0...size )
-		{
-			stuffClass.push( new Thing( "thing", 1000 ) );
-		}
-		trace( 'class create' );
-		trace( t() - initY );
-		initY = t();
-		
-		for ( i in 0...size )
-		{
-			stuffClass[ i ].name;
-		}
-		trace( 'class access' );
-		trace( t() - initY );
-		initY = t();
-	
-		var stuffTD : Array<ThingTD> = [];
-		for ( i in 0...size )
-		{
-			var t : ThingTD = { name : "thing", years : 1000 };
-			stuffTD.push( t );
-		}
-		trace( 'td create' );
-		trace( t() - initY );
-		initY = t();	
-		
-		
-		for ( i in 0...size )
-		{
-			stuffTD[ i ].name;
-		}
-		trace( 'class access' );
-		trace( t() - initY );
-		initY = t();
-	}
-	
-	private function collectionTests() : Void
-	{
-		var t = Lib.getTimer;
-		var size : Int = 9999;
-		var p : String;
-		
-		var initY : Int = t();
-		var bigtimearr : Array<String> = new Array();
-		for ( i in 0...size )
-		{
-			bigtimearr[i]= "HOOO" ;
-		}
-		trace( 'arr create' );
-		trace( t() - initY );
-		initY = t();
-		
-		for ( i in 0...size )
-		{
-			p = bigtimearr[ i ];
-		}
-		trace( 'arr iterate' );
-		trace( t() - initY );
-		initY = t();
-		
-		for ( s in bigtimearr )
-		{
-			p = s;
-		}
-		trace( 'arr iterate2' );
-		trace( t() - initY );
-		initY = t();
-		
-		var bigtimelist : FastList<String> = new FastList<String>();
-		for ( i in 0...size )
-		{
-			bigtimelist.add("HOOO");
-		}
-		trace( 'list create' );
-		trace( t() - initY );
-		initY = t();
-		
-		for ( s in bigtimelist )
-		{
-			p = s;
-		}
-		trace( 'list iterate' );
-		trace( t() - initY );
-		initY = t();
-		
-		//
-		//var bigtimev : flash.Vector<String> = new flash.Vector( size );
-		//for ( i in 0...size )
-		//{
-			//bigtimev[i] = "go";
-		//}
-		//trace( 'V create' );
-		//trace( t() - initY );
-		//initY = t();
-		//
-		//for ( i in 0...size )
-		//{
-			//p = bigtimev[ i ];
-		//}
-		//trace( 'V iterate' );
-		//trace( t() - initY );
-		//initY = t();
-	}
-	
-}
-
-typedef ThingTD = {
-	var name : String;
-	var years : Int;
-}
-
-class Thing {
-	public var name : String;
-	public var years : Int;
-	public function new( name : String, years : Int ) 
-	{
-		this.name = name;
-		this.years = years;
-	}
 }

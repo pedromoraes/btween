@@ -5,7 +5,7 @@
 
 package hxmotion.events;
 
-import flash.events.Event;
+import hxmotion.Types;
 
 class BTweenEvent extends Event
 {
