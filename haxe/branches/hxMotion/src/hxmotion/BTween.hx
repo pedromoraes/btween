@@ -185,6 +185,7 @@ class BTween extends Sequenceable {
 			else
 				Reflect.setField( target, prop.name, prop.initValue + ( prop.targetValue - prop.initValue ) * index );
 		}
+		if ( updateListeners != null ) dispatchEvent( new BTweenEvent( BTweenEvent.UPDATE ) );
 		if ( finished ) stop();
 	}
 

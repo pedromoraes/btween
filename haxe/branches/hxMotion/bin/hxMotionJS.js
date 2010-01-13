@@ -135,7 +135,7 @@ neash.events.EventDispatcher.prototype.DispatchIOErrorEvent = function() {
 	this.dispatchEvent(evt);
 }
 neash.events.EventDispatcher.prototype.DumpListeners = function() {
-	haxe.Log.trace(this.mEventMap,{ fileName : "EventDispatcher.hx", lineNumber : 147, className : "neash.events.EventDispatcher", methodName : "DumpListeners"});
+	null;
 }
 neash.events.EventDispatcher.prototype.RemoveByID = function(inType,inID) {
 	if(!this.mEventMap.exists(inType)) return;
@@ -1212,6 +1212,7 @@ hxmotion.BTween.prototype.step = function(evt) {
 			else this.target[prop.name] = prop.initValue + (prop.targetValue - prop.initValue) * index;
 		}
 	}
+	if(this.updateListeners != null) this.dispatchEvent(new hxmotion.events.BTweenEvent("update"));
 	if(finished) this.stop();
 }
 hxmotion.BTween.prototype.stop = function(premature) {
