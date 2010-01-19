@@ -49,7 +49,7 @@ class Sequenceable extends EventDispatcher, implements ISequenceable, implements
 			seq = obj;
 			addEventListener( BTweenEvent.STOP, cast seq.start );
 		} else if ( Reflect.isFunction( obj ) ) {
-			if ( Std.is( params, Array ) )
+			if ( params != null && Std.is( params, Array ) )
 			{
 				seq = new Call( obj, params );
 			}

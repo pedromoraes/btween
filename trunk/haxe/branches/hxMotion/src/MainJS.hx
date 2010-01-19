@@ -26,6 +26,7 @@ class MainJS
 		div.style.top = "0px";
 		
 		div.style.tween( { ease : Ease.inCirc, time: 300, mod : [ CSS.pos, { top : 300 } ] } ).start()
+		.update( Log.trace )
 		.queue( div.style.tween( [ { time: 300, mod : [ CSS.pos, { top : 100 } ] } ] ) )
 		.queue( Log.trace, 'done, callback' );
 		#else
