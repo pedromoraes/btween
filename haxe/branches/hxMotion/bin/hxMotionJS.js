@@ -135,7 +135,7 @@ neash.events.EventDispatcher.prototype.DispatchIOErrorEvent = function() {
 	this.dispatchEvent(evt);
 }
 neash.events.EventDispatcher.prototype.DumpListeners = function() {
-	null;
+	haxe.Log.trace(this.mEventMap,{ fileName : "EventDispatcher.hx", lineNumber : 154, className : "neash.events.EventDispatcher", methodName : "DumpListeners"});
 }
 neash.events.EventDispatcher.prototype.RemoveByID = function(inType,inID) {
 	if(!this.mEventMap.exists(inType)) return;
@@ -168,16 +168,15 @@ neash.events.EventDispatcher.prototype.dispatchEvent = function(event) {
 	var list = this.mEventMap.get(event.type);
 	var capture = event.eventPhase == neash.events.EventPhase.CAPTURING_PHASE;
 	if(list != null) {
-		{
-			var _g1 = 0, _g = list.length;
-			while(_g1 < _g) {
-				var i = _g1++;
-				var listener = list[i];
-				if(listener.mUseCapture == capture) {
-					listener.dispatchEvent(event);
-					if(event.IsCancelledNow()) return true;
-				}
+		var idx = 0;
+		while(idx < list.length) {
+			var listener = list[idx];
+			if(listener.mUseCapture == capture) {
+				listener.dispatchEvent(event);
+				if(event.IsCancelledNow()) return true;
 			}
+			if(idx < list.length && listener != list[idx]) null;
+			else idx++;
 		}
 		return true;
 	}
@@ -377,7 +376,7 @@ hxmotion.Sequenceable.prototype.queue = function(obj,params) {
 		this.addEventListener("stop",$closure(seq,"start"));
 	}
 	else if(Reflect.isFunction(obj)) {
-		if(Std["is"](params,Array)) {
+		if(params != null && Std["is"](params,Array)) {
 			seq = new hxmotion.Call(obj,params);
 		}
 		else if(params != null) {
@@ -489,7 +488,7 @@ hxmotion.Call.prototype.onCalleeComplete = function(evt) {
 }
 hxmotion.Call.prototype.params = null;
 hxmotion.Call.prototype.start = function(params) {
-	if(Std["is"](params,hxmotion.events.BTweenEvent)) {
+	if(params != null && Std["is"](params,hxmotion.events.BTweenEvent)) {
 		var caller = (function($this) {
 			var $r;
 			var tmp = (function($this) {
@@ -512,7 +511,7 @@ hxmotion.Call.prototype.start = function(params) {
 		caller.removeEventListener("stop",$closure(this,"start"));
 	}
 	var result = this.method.apply(this,this.params);
-	if(Std["is"](result,hxmotion.ISequenceable)) {
+	if(result != null && Std["is"](result,hxmotion.ISequenceable)) {
 		var nextStep = (function($this) {
 			var $r;
 			var tmp = result;
@@ -1175,7 +1174,7 @@ hxmotion.BTween.prototype.reverseModArgs = function(args,deleteFlag) {
 }
 hxmotion.BTween.prototype.rounded = null;
 hxmotion.BTween.prototype.start = function(args) {
-	if(!Std["is"](args,hxmotion.events.BTweenEvent)) this.consume(args);
+	if(args != null && !Std["is"](args,hxmotion.events.BTweenEvent)) this.consume(args);
 	this.startTime = jshelpers.Lib.getTimer();
 	{
 		var _g = 0, _g1 = this.props;

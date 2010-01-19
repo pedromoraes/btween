@@ -44,7 +44,7 @@ class BTween extends Sequenceable {
 	}
 
 	override public function start( ?args : Dynamic ) : ISequenceable {
-		if ( !Std.is( args, BTweenEvent ) ) consume( args );
+		if ( args != null && !Std.is( args, BTweenEvent ) ) consume( args );
 		startTime = Lib.getTimer();
 		for ( prop in props ) prop.initValue = Reflect.field( target, prop.name );
 		if ( modifier != null && Reflect.field( modifierArgs, FLAG_MODARGS_REVERSION ) != null )
