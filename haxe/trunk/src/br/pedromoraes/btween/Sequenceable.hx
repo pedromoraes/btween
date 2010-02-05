@@ -1,8 +1,8 @@
 package br.pedromoraes.btween;
+import flash.events.EventDispatcher;
 
-import br.pedromoraes.events.HxEventDispatcher;
 
-class Sequenceable extends HxEventDispatcher, implements ISequenceable
+class Sequenceable extends EventDispatcher, implements ISequenceable
 {
 
 	public function start(?params:Dynamic):ISequenceable
@@ -53,13 +53,13 @@ class Sequenceable extends HxEventDispatcher, implements ISequenceable
 			{
 				call = new Call( obj );
 			}
-			addEventListener(BTweenEvent.COMPLETE, call.start);
+			addEventListener(BTweenEvent.COMPLETE, cast call.start);
 			return call;
 		}
 		else if ( Std.is( obj, Int ) )
 		{
 			var delay:Delay = new Delay(cast(obj, Int));
-			addEventListener(BTweenEvent.COMPLETE, delay.start);
+			addEventListener(BTweenEvent.COMPLETE, cast delay.start);
 			return delay;
 		}
 		return null;

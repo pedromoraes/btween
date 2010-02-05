@@ -83,7 +83,7 @@ class BTween extends Sequenceable, implements ISequenceable
 		{
 			var instance:BTween = obj == null ? this.clone() : obj;
 			if ( Std.is( params, Array ) ) Reflect.callMethod( instance, instance.add, cast( params, Array<Dynamic> ) );
-			addEventListener(BTweenEvent.COMPLETE, instance.start);
+			addEventListener(BTweenEvent.COMPLETE, cast instance.start);
 			return instance;
 		}
 		else if ( Std.is(obj, ISequenceable) )
@@ -106,13 +106,13 @@ class BTween extends Sequenceable, implements ISequenceable
 			{
 				call = new Call( obj );
 			}
-			addEventListener(BTweenEvent.COMPLETE, call.start);
+			addEventListener(BTweenEvent.COMPLETE, cast call.start);
 			return call;
 		}
 		else if ( Std.is( obj, Int ) )
 		{
 			var delay:Delay = new Delay(cast(obj, Int));
-			addEventListener(BTweenEvent.COMPLETE, delay.start);
+			addEventListener(BTweenEvent.COMPLETE, cast delay.start);
 			return delay;
 		}
 		return null;
@@ -483,7 +483,7 @@ class BTween extends Sequenceable, implements ISequenceable
 		cloneOf = null;
 	}
 	
-	public function toString():String
+	public override function toString():String
 	{
 		var lsDebugTargets:String = "";
 		var tween:Dynamic;

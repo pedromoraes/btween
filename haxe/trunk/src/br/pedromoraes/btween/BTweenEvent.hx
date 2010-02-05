@@ -1,22 +1,22 @@
 package br.pedromoraes.btween;
 
-import br.pedromoraes.events.HxEvent;
+import flash.events.Event;
 
-class BTweenEvent extends HxEvent
+class BTweenEvent extends Event
 {
 	
-	public static var START:Int = 0;
-	public static var UPDATE:Int = 1;
-	public static var COMPLETE:Int = 2;
+	public static inline var START:String = 'start';
+	public static inline var UPDATE:String = 'update';
+	public static inline var COMPLETE:String = 'complete';
 	
-	public function new(type:Int, ?target:Dynamic = '', ?data:Dynamic = '' )
+	public function new(type:String, ?bubbles:Null<Bool>, ?cancelable:Null<Bool> )
 	{
-		super(type, target, data);
+		super(type, bubbles, cancelable);
 	}
 
-	public override function clone() : HxEvent 
+	public override function clone() : Event 
 	{
-		var copy:BTweenEvent = new BTweenEvent(type, target, data);
+		var copy:BTweenEvent = new BTweenEvent(type, bubbles, cancelable);
 		return copy;
 	}
 }
