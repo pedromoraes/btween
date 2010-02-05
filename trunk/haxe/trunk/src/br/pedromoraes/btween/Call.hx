@@ -21,7 +21,7 @@ class Call extends Sequenceable, implements ISequenceable
 		if (Std.is(params, BTweenEvent))
 		{
 			var caller:ISequenceable = cast(cast(params, BTweenEvent).target, ISequenceable);
-			caller.removeEventListener(BTweenEvent.COMPLETE, start);
+			caller.removeEventListener(BTweenEvent.COMPLETE, cast start);
 		}
 		var result:Dynamic = Reflect.callMethod(this, method, this.params);
 		if ( Std.is( result, ISequenceable ) )

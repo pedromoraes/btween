@@ -1,8 +1,8 @@
 package br.pedromoraes.btween;
 
-import br.pedromoraes.events.IHxEventDispatcher;
+import flash.events.IEventDispatcher;
 
-interface ISequenceable implements IHxEventDispatcher
+interface ISequenceable implements IEventDispatcher
 {
 
 	function start(?params:Dynamic):ISequenceable;
