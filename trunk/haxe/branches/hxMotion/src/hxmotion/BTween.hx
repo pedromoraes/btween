@@ -23,6 +23,7 @@ class BTween extends Sequenceable {
 	inline static var modifierProp : String = 'mod';
 	inline static var roundedProp : String = 'rounded';
 	inline static var targetProp : String = 'target';
+	inline static var fromProp : String = 'from';
 
 	public var ease : Dynamic;
 	public var rounded : Bool;
@@ -31,6 +32,7 @@ class BTween extends Sequenceable {
 	public var props : TypedArray<BTweenProp>;
 	public var modifier : Dynamic;
 	public var modifierArgs : Dynamic;
+	public var fromProps : Dynamic;
 
 	var startTime : Int;
 	var updateListeners : TypedArray<Dynamic>;
@@ -45,12 +47,13 @@ class BTween extends Sequenceable {
 
 	override public function start( ?args : Dynamic ) : ISequenceable {
 		if ( args != null && !Std.is( args, BTweenEvent ) ) consume( args );
-		startTime = Lib.getTimer();
-		for ( prop in props ) prop.initValue = Reflect.field( target, prop.name );
+		startTime = Lib.getTimer();		
+		for ( prop in Reflect.fields( fromProps ) )
+			Reflect.setField( target, prop, Reflect.field( fromProps, prop ) );
+		for ( prop in props )
+			prop.initValue = Reflect.field( target, prop.name );
 		if ( modifier != null && Reflect.field( modifierArgs, FLAG_MODARGS_REVERSION ) != null )
-		{
 			reverseModArgs( modifierArgs, true );
-		}
 		dispatchEvent( new BTweenEvent( BTweenEvent.START ) );
 		enterFrameDispatcher.addEventListener( ENTER_FRAME, step );
 		return this;
@@ -152,6 +155,10 @@ class BTween extends Sequenceable {
 			if ( Reflect.hasField( args, targetProp ) ) {
 				target = args.target;
 				Reflect.deleteField( args, targetProp );
+			}
+			if ( Reflect.hasField( args, fromProp ) ) {
+				fromProps = args.from;
+				Reflect.deleteField( args, fromProp );
 			}
 			if ( Reflect.hasField( args, modifierProp ) ) {
 				if ( !Std.is( args.mod, Array ) ) {
