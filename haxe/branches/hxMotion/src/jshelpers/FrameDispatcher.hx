@@ -19,7 +19,7 @@ class FrameDispatcher extends EventDispatcher
 	private function dispatch() : Void
 	{
 		this.dispatchEvent( new Event( 'enterFrame' ) );
-		Timer.delay( dispatch, 25 );
+		Timer.delay( dispatch, 33 );
 	}
 	
 }

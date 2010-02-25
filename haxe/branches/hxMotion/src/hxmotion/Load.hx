@@ -1,4 +1,5 @@
 ﻿package hxmotion;
+import hxmotion.events.BTweenEvent;
 import hxmotion.events.LoadEvent;
 import flash.events.EventDispatcher;
 import flash.net.URLLoader;
@@ -20,11 +21,12 @@ enum LoadType {
 	TYPE_UNKNOWN_TEXT;
 }
 
-class Load extends EventDispatcher {
-	public static function fetch( ?basePath : String, jobs : Array<String>, ?context : LoaderContext ) : Load {
+class Load extends Sequenceable {
+	public static function batch( jobs : Dynamic, ?basePath : String, ?context : LoaderContext ) : Load {
 		var l : Load = new Load();
 		if ( basePath != null ) l.basePath = basePath;
-		for ( job in jobs )
+		var list : Array<String> = Std.is( jobs, Array ) ? jobs : [ jobs ];
+		for ( job in list )
 		{
 			context == null ? l.add( job ) : l.add( job, context );
 		}
@@ -82,50 +84,59 @@ class Load extends EventDispatcher {
 		return progress / count;
 	}
 	
-	public function start() : Bool {
+	public override function start( ?params : Dynamic ) : ISequenceable {
 		var jobs : Array<ALoader> = getSortedJobs();
 		if ( progress == 0 )
 		{
 			dispatchEvent( new LoadEvent( LoadEvent.START ) );
 		}
 
-		if ( jobs.length == 0 )
+		if ( jobs.length > 0 )
 		{
-			return false;
-		}
 
-		for ( conn in activeConnections ... maxConnections )
-		{
-			if ( conn == jobs.length ) break;
-			var loader : ALoader = jobs[ conn ];
-			loader.addEventListener( LoadEvent.COMPLETE, onJobComplete );
-			loader.addEventListener( LoadEvent.PROGRESS, onJobProgress );
-			loader.start();
-			activeConnections ++;
+			for ( conn in activeConnections ... maxConnections )
+			{
+				if ( conn == jobs.length ) break;
+				var loader : ALoader = jobs[ conn ];
+				loader.addEventListener( LoadEvent.COMPLETE, onJobComplete );
+				loader.addEventListener( LoadEvent.PROGRESS, onJobProgress );
+				loader.start();
+				activeConnections ++;
+			}
+			
 		}
-		return true;
+		return this;
 	}
 	
+	private function onJobError( event : LoadEvent ) : Void {
+		dispatchEvent( event );
+	}
+
 	private function onJobProgress( event : LoadEvent ) : Void {
 		dispatchEvent( new LoadEvent( LoadEvent.PROGRESS, false, false, progress ) );
 	}
 	
 	private function onJobComplete( event : LoadEvent ) : Void {
 		activeConnections --;
-		if ( !start() && activeConnections == 0 )
+		start();
+		if ( activeConnections == 0 )
 		{
-			if ( Lambda.count( stack ) == 1 )
-				dispatchEvent( new LoadEvent( LoadEvent.COMPLETE, false, false, progress ) );
-			else
-				dispatchEvent( new LoadEvent( LoadEvent.COMPLETE, false, false, progress ) );
+			dispatchEvent( new LoadEvent( LoadEvent.COMPLETE, false, false, progress ) );
+			dispatchEvent( new BTweenEvent( BTweenEvent.STOP ) );
 		}
 	}
 	
-	public function stop() : Void {
+	public override function update( listener : Dynamic ) : ISequenceable {
+		addEventListener( LoadEvent.PROGRESS, listener );
+		return this;
+	}
+	
+	public override function stop( ?premature : Bool = false ) : ISequenceable {
 		for ( job in stack )
 		{
 			if ( job.started && job.progress < 1 ) job.cancel();
 		}
+		return this;
 	}
 	
 	public function add( path : String, ?type : LoadType, ?key : String, ?priority : Int, ?context : LoaderContext ) : ALoader {
@@ -152,6 +163,8 @@ class Load extends EventDispatcher {
 		loader.priority = priority;
 		stack.set( key, loader );
 
+		loader.addEventListener( LoadEvent.ERROR, onJobError );
+		
 		return loader;
 	}
 

@@ -9,7 +9,7 @@ class Call extends Sequenceable, implements ISequenceable
 
 	public function new( method : Dynamic, ?params : Array<Dynamic> ) : Void {
 		this.method = method;
-		if ( params != null ) this.params = params;
+		this.params = params == null ? [] : params;
 		super();
 	}
 
@@ -18,10 +18,13 @@ class Call extends Sequenceable, implements ISequenceable
 			var caller : ISequenceable = cast( cast( params, BTweenEvent ).target, ISequenceable );
 			caller.removeEventListener( BTweenEvent.STOP, cast start );
 		}
-		var result:Dynamic = Reflect.callMethod(this, method, this.params);
+		
+		var result : Dynamic = null;
+		result = Reflect.callMethod(this, this.method, this.params);
+		
 		if ( result != null && Std.is( result, ISequenceable ) ) {
 			var nextStep:ISequenceable = cast( result, ISequenceable );
-			//nextStep.addEventListener(BTweenEvent.COMPLETE, onCalleeComplete);
+			nextStep.addEventListener(BTweenEvent.STOP, onCalleeComplete);
 			return nextStep;
 		} else {
 			dispatchEvent ( new BTweenEvent ( BTweenEvent.STOP ) );
