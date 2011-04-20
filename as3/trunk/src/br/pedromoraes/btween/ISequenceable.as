@@ -14,6 +14,8 @@ package br.pedromoraes.btween
 		function back(pTransition:Function = undefined):ISequenceable
 
 		function change(pParams:Object):ISequenceable
+		
+		function evt(evt:String,handler:Function):ISequenceable
 
 	}
 }

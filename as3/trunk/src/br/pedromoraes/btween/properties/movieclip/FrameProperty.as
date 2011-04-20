@@ -14,17 +14,7 @@ package br.pedromoraes.btween.properties.movieclip
 		{
 			if ( frame is String )
 			{
-				var labels : Array = target.currentLabels;
-				var found : Boolean = false;
-				for ( var i : uint = 0; i < labels.length; i++ ) {
-					var label : FrameLabel = labels[i];
-					if ( label.name == frame ) {
-						frame = label.frame;
-						found = true;
-						break;
-					}
-				}
-				if ( !found ) frame = null;
+				frame = getLabelFrame( target, frame );
 			}
 
 			if ( frame == null )
@@ -34,6 +24,22 @@ package br.pedromoraes.btween.properties.movieclip
 			super( target, { frame : frame } );
 		}
 
+		private function getLabelFrame( target : MovieClip, name : String ) : int
+		{
+			var frame : int;
+			var labels : Array = target.currentLabels;
+			var found : Boolean = false;
+			for ( var i : uint = 0; i < labels.length; i++ ) {
+				var label : FrameLabel = labels[i];
+				if ( label.name == name ) {
+					frame = label.frame;
+					found = true;
+					break;
+				}
+			}
+			return frame;
+		}
+		
 		public override function update( tween : BTween, elapsed : int ) : void
 		{
 			if ( !startValues ) init();

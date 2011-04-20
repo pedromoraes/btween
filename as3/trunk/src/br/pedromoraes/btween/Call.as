@@ -6,11 +6,13 @@ package br.pedromoraes.btween
 		
 		public var method:Function;
 		public var params:Array;
+		public var scope:Object;
 		
-		public function Call(pMethod:Function, paParams:Array = null)
+		public function Call(pMethod:Function, paParams:Array = null, pScope: Object = null)
  		{
  			method = pMethod;
  			params = paParams || new Array();
+			scope = pScope;
  			super();
  		}
 		
@@ -21,7 +23,7 @@ package br.pedromoraes.btween
 				var caller:ISequenceable = (paParams[0] as BTweenEvent).target as ISequenceable;
 				caller.removeEventListener(BTweenEvent.COMPLETE, start);
 			}
-			var result:Object = method.apply(this, params);
+			var result:Object = method.apply(scope, params);
 			if (result is ISequenceable)
 			{
 				var nextStep:ISequenceable = result as ISequenceable;
