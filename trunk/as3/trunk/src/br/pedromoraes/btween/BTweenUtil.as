@@ -8,18 +8,20 @@ package br.pedromoraes.btween
 		{
 			for each (var filter:Object in paFilters)
 			{
-				getTweens(filter).every(stop);
+				getTweens(filter).every( stop );
 			}
 		}
 
 		public static function stopTweensByName(psName:String):void
 		{
+			trace(BTween.instances.length);
 			var laResults:Array = BTween.instances.slice();
 			for each (var instance:BTween in BTween.instances)
 			{
 				if (instance.name == psName)
 					instance.stop();
 			}
+			trace(BTween.instances.length);
 		}
 
 		public static function getTweens(pFilter:Object):Array

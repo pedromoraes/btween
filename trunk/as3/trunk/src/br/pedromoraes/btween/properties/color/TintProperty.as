@@ -71,7 +71,6 @@ package br.pedromoraes.btween.properties.color
 
 		private function init():void
 		{
-			trace("init");
 			if (target.transform.colorTransform)
 			{
 				startValues = target.transform.colorTransform;

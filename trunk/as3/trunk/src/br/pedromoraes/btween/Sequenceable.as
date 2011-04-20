@@ -31,7 +31,7 @@ package br.pedromoraes.btween
 		{
 			return null;
 		}
-	
+
 		public function queue(pObj:Object = null, ... paParams:Array):ISequenceable
 		{
 			if (pObj is ISequenceable)
@@ -45,6 +45,15 @@ package br.pedromoraes.btween
 				addEventListener(BTweenEvent.COMPLETE, call.start);
 				return call;
 			}
+			else if (pObj is Array)
+			{
+				var seq : ISequenceable;
+				for each ( var item : * in pObj )
+				{
+					seq = queue( item );
+				}
+				return seq;
+			}
 			else if (pObj is Number)
 			{
 				var delay:Delay = new Delay(pObj as Number);
@@ -52,6 +61,12 @@ package br.pedromoraes.btween
 				return delay;
 			}
 			return null;
+		}
+		
+		public function evt(evt:String,handler:Function):ISequenceable
+		{
+			addEventListener(evt, handler);
+			return this;
 		}
 		
 	}
